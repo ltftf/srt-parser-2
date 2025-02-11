@@ -1,50 +1,58 @@
-## srt-parser-2
+# srt-parser-2
 
 An SRT parser for Javascript.
 
 It reads an `.srt` file into an array.
+
+This is a fork of [`srt-parser-2`](https://github.com/1c7/srt-parser-2).
+
+## What's changed
+
+- Removed the unnecessary class instantiation
+- Text is parsed as an array of strings (by line) instead of a single string with `\n` characters
 
 ## Install
 
 `npm`
 
 ```
-npm install srt-parser-2
+npm install @ltftf/srt-parser-2
 ```
 
 or `yarn`
 
 ```
-yarn add srt-parser-2
+yarn add @ltftf/srt-parser-2
 ```
 
 ## Example
 
-This is a srt format file:
+This is an SRT format file:
 
 ```
 1
 00:00:11,544 --> 00:00:12,682
 Hello
+World
 ```
 
 it would become:
 
 ```
 [{
-    id: '1',
-    startTime: '00:00:11,544',
+    id: "1",
+    startTime: "00:00:11,544",
     startSeconds: 11.544,
-    endTime: '00:00:12,682',
+    endTime: "00:00:12,682",
     endSeconds: 12.682,
-    text: 'Hello'
+    text: [ "Hello", "World" ]
 }]
 ```
 
-### Enviroment support
+### Environment support
 
 Since it only process text,  
-it should work in both `Browser` and `Node.js` enviroment
+it should work in both `Browser` and `Node.js` environment
 
 ## Usage
 
@@ -55,14 +63,13 @@ let srt = `
 Hello
 `;
 
-import srtParser2 from "srt-parser-2";
-var parser = new srtParser2();
-var srt_array = parser.fromSrt(srt);
-console.log(srt_array);
+import { fromSrt, toSrt } from "@ltftf/srt-parser-2";
+var srtArray = fromSrt(srt);
+console.log(srtArray);
 
 // turn array back to SRT string.
-var srt_string = parser.toSrt(srt_array);
-console.log(srt_string);
+var srtString = toSrt(srtArray);
+console.log(srtString);
 ```
 
 You can run this example using `node example/1.Comma.js`
@@ -87,7 +94,7 @@ MIT
 
 ## Why?
 
-Why this one special? There are plently SRT parser on npm:
+Why this one special? There are plenty of SRT parsers on npm:
 
 - [subtitles-parser](https://www.npmjs.com/package/subtitles-parser)
 - [subtitles-parser-vtt](https://www.npmjs.com/package/subtitles-parser-vtt)
@@ -127,7 +134,7 @@ Or this:
 1:00:11,5
 ```
 
-Similiar, hour & millisecond is only 1 digit (wrong)
+Similar, hour & millisecond is only 1 digit (wrong)
 
 Or this
 
@@ -152,7 +159,7 @@ Basic principle:
 
 1. If hour,minute,second is shorter than 2 digit, pad start with "0", if longer than 2 digit, only save first 2 digit.
 2. Millisecond is the same, but it's 3 digit.
-3. Seperator can be `.`(periods) or `,`(comma), periods(incorrect) will be replace with comma(correct)
+3. Separator can be `.`(periods) or `,`(comma), periods(incorrect) will be replace with comma(correct)
 
 <!-- ## SRT Format Standard (kind of)
 | Format       | Is this SRT standard  |
