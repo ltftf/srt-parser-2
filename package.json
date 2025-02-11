@@ -15,7 +15,7 @@
     "default": "./dist/index.js"
   },
   "bin": {
-    "srt-parser-2": "./bin/index.js"
+    "srt-parser-2": "bin/index.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
