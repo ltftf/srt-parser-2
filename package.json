@@ -9,6 +9,11 @@
     "dev": "tsc -watch",
     "test": "mocha -r esbuild-register test/**/*.ts"
   },
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "default": "./dist/index.js"
+  },
   "bin": {
     "srt-parser-2": "./bin/index.js"
   },

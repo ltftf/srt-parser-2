@@ -6,12 +6,11 @@ let srt = `
 Hello
 `;
 
-const srtParser2 = require('srt-parser-2').default
-var parser = new srtParser2();
-var result = parser.fromSrt(srt);
+import { fromSrt, toSrt } from "@ltftf/srt-parser-2";
+var result = fromSrt(srt);
 console.log(result);
-console.log('\n\n');
+console.log("\n\n");
 
 // turn array back to SRT string.
-var srt_string = parser.toSrt(result);
+var srt_string = toSrt(result);
 console.log(srt_string);

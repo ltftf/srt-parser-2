@@ -1,5 +1,5 @@
 // node example/2.Dot.js
-const srtParser2 = require('srt-parser-2').default
+import { fromSrt } from "@ltftf/srt-parser-2";
 
 var srt = `
 1
@@ -7,6 +7,5 @@ var srt = `
 Hello
 `;
 
-var parser = new srtParser2();
-var result = parser.fromSrt(srt);
+var result = fromSrt(srt);
 console.log(result);
