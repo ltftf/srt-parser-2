@@ -1,4 +1,4 @@
-import { fromSrt, toSrt, type Line } from "../index";
+import { fromSrt, toSrt, type Dialogue } from "../index";
 
 import { should, expect } from "chai";
 import fs from "fs";
@@ -9,7 +9,7 @@ describe("Test wrong format: dot as separator", function () {
   });
 
   should();
-  var result: Line[];
+  var result: Dialogue[];
 
   it("parser.fromSrt() should execute without crashes", function () {
     result = fromSrt(srt);
@@ -26,7 +26,7 @@ describe("Test wrong format: dot as separator", function () {
       expect(s).to.have.property("id");
       expect(s).to.have.property("startTime");
       expect(s).to.have.property("endTime");
-      expect(s).to.have.property("text");
+      expect(s).to.have.property("lines");
     }
   });
 
@@ -41,7 +41,7 @@ describe("Test wrong format: single digit hour", function () {
   });
 
   should();
-  var result: Line[];
+  var result: Dialogue[];
 
   it("parser.fromSrt() should execute without crashes", function () {
     result = fromSrt(srt);
@@ -58,7 +58,7 @@ describe("Test wrong format: single digit hour", function () {
       expect(s).to.have.property("id");
       expect(s).to.have.property("startTime");
       expect(s).to.have.property("endTime");
-      expect(s).to.have.property("text");
+      expect(s).to.have.property("lines");
     }
   });
 
@@ -73,7 +73,7 @@ describe("Test wrong format: single digit timecodes", function () {
   });
 
   should();
-  var result: Line[];
+  var result: Dialogue[];
 
   it("parser.fromSrt() should execute without crashes", function () {
     result = fromSrt(srt);
@@ -90,7 +90,7 @@ describe("Test wrong format: single digit timecodes", function () {
       expect(s).to.have.property("id");
       expect(s).to.have.property("startTime");
       expect(s).to.have.property("endTime");
-      expect(s).to.have.property("text");
+      expect(s).to.have.property("lines");
     }
   });
 

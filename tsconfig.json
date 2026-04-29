@@ -5,6 +5,7 @@
     "outDir": "./dist",
     "strict": true,
     "skipLibCheck": true,
+    "removeComments": true,
   },
   "files": [
     "index.ts"

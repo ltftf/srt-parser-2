@@ -10,6 +10,7 @@ This is a fork of [`srt-parser-2`](https://github.com/1c7/srt-parser-2).
 
 - Removed the unnecessary class instantiation
 - Text is parsed as an array of strings (by line) instead of a single string with `\n` characters
+- Handles the obsolete `\r` line breaks
 
 ## Install
 

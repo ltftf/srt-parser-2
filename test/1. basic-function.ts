@@ -1,4 +1,4 @@
-import { fromSrt, toSrt, type Line } from "../index";
+import { fromSrt, toSrt, type Dialogue } from "../index";
 
 import { expect, should } from "chai";
 import fs from "fs";
@@ -9,7 +9,7 @@ var srt = fs.readFileSync("./test-file/correct.srt", { encoding: "utf-8" });
 
 describe("Test basic function", function () {
   should();
-  var result: Line[];
+  var result: Dialogue[];
 
   it("parser.fromSrt() should execute without crashes", function () {
     result = fromSrt(srt);
@@ -25,7 +25,7 @@ describe("Test basic function", function () {
       expect(s).to.have.property("id");
       expect(s).to.have.property("startTime");
       expect(s).to.have.property("endTime");
-      expect(s).to.have.property("text");
+      expect(s).to.have.property("lines");
     }
   });
 
@@ -62,19 +62,19 @@ describe("Test files with the same content but different line breaks and formatt
       expect(parsed[2].endSeconds).to.be.equal(getFixedTime("00:00:12,080")[1]);
 
       for (const block of parsed) {
-        expect(block.text).to.be.a("array");
+        expect(block.lines).to.be.a("array");
       }
-      expect(parsed[0].text).to.have.lengthOf(1);
-      expect(parsed[1].text).to.have.lengthOf(2);
-      expect(parsed[2].text).to.have.lengthOf(1);
+      expect(parsed[0].lines).to.have.lengthOf(1);
+      expect(parsed[1].lines).to.have.lengthOf(2);
+      expect(parsed[2].lines).to.have.lengthOf(1);
 
-      expect(parsed[0].text[0])
+      expect(parsed[0].lines[0])
         .to.be.equal(
           "Hi, I’m Carrie Anne, and welcome to Crash Course Computer Science!"
         );
-      expect(parsed[1].text[0]).to.be.equal("We’re here: the final episode!");
-      expect(parsed[1].text[1]).to.be.equal("Second line");
-      expect(parsed[2].text[0]).to.be.equal(
+      expect(parsed[1].lines[0]).to.be.equal("We’re here: the final episode!");
+      expect(parsed[1].lines[1]).to.be.equal("Second line");
+      expect(parsed[2].lines[0]).to.be.equal(
         "If you’ve watched the whole series, hopefully you’ve developed a newfound appreciation"
       );
     }

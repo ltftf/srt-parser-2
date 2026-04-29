@@ -1,10 +1,10 @@
-interface Line {
+interface Dialogue {
   id: string;
   startTime: string;
   startSeconds: number;
   endTime: string;
   endSeconds: number;
-  text: string[];
+  lines: string[];
 }
 
 function pad(digits: number, str: string, padEnd: boolean = true): string {
@@ -22,18 +22,6 @@ function pad(digits: number, str: string, padEnd: boolean = true): string {
 }
 
 function getFixedTime(time: string): [string, number] {
-  // Fix the format if the format is wrong
-  // 00:00:28.9670 Become 00:00:28,967
-  // 00:00:28.967  Become 00:00:28,967
-  // 00:00:28.96   Become 00:00:28,960
-  // 00:00:28.9    Become 00:00:28,900
-
-  // 00:00:28,96   Become 00:00:28,960
-  // 00:00:28,9    Become 00:00:28,900
-  // 00:00:28,0    Become 00:00:28,000
-  // 00:00:28,01   Become 00:00:28,010
-  // 0:00:10,500   Become 00:00:10,500
-
   let [hr, min, sec, ms] = time.split(/[:,.]/);
   hr = pad(2, hr, false);
   min = pad(2, min, false);
@@ -52,36 +40,44 @@ function getFixedTime(time: string): [string, number] {
   return [timeStr, timeSec];
 }
 
-function fromSrt(data: string): Line[] {
-  const arr = data
-    .split(
-      /(\d+)\r?\n(\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+) --> (\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+)/
-    )
-    .slice(1);
-  const items: Line[] = [];
+function fromSrt(data: string): Dialogue[] {
+  if (typeof data !== "string") {
+    throw new TypeError(`Expected a string, got ${typeof data}`);
+  }
+
+  // if the file has the '\r' line breaks, replace them
+  data = data.replace(/\r(?!\n)/g, "\r\n");
+
+  let arr = data.split(
+    /(\d+)[^\S\r\n]*\r?\n(\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+) --> (\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+)/
+  ).slice(1);
+
+  const dialogues: Dialogue[] = [];
   for (let i = 0; i < arr.length; i += 4) {
+    const text = arr[i + 3].trim();
+    if (!text) continue;
     const [startTime, startSeconds] = getFixedTime(arr[i + 1]);
     const [endTime, endSeconds] = getFixedTime(arr[i + 2]);
-    const newLine: Line = {
+    const dialogue: Dialogue = {
       id: arr[i],
       startTime,
       startSeconds,
       endTime,
       endSeconds,
-      text: arr[i + 3].trim().split(/\r?\n/),
+      lines: text.split(/\r?\n/),
     };
-    items.push(newLine);
+    dialogues.push(dialogue);
   }
-  return items;
+  return dialogues;
 }
 
-function toSrt(data: Line[]) {
+function toSrt(data: Dialogue[]) {
   const EOL = "\r\n";
   let res = "";
   for (const block of data) {
     res += block.id + EOL;
     res += block.startTime + " --> " + block.endTime + EOL;
-    for (const line of block.text) {
+    for (const line of block.lines) {
       res += line + EOL;
     }
     res += EOL;
@@ -90,4 +86,4 @@ function toSrt(data: Line[]) {
 }
 
 export { fromSrt, toSrt };
-export type { Line };
+export type { Dialogue };
