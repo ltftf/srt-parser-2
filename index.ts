@@ -64,7 +64,7 @@ function fromSrt(data: string): Dialogue[] {
       startSeconds,
       endTime,
       endSeconds,
-      lines: text.split(/\r?\n/),
+      lines: text.split(/\r?\n/).filter(line => line),
     };
     dialogues.push(dialogue);
   }
