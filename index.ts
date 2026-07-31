@@ -40,16 +40,15 @@ function getFixedTime(time: string): [string, number] {
   return [timeStr, timeSec];
 }
 
-function fromSrt(data: string): Dialogue[] {
+function fromSrt(data: string, preserveEmptyLines?: boolean): Dialogue[] {
   if (typeof data !== "string") {
     throw new TypeError(`Expected a string, got ${typeof data}`);
   }
 
-  // if the file has the '\r' line breaks, replace them
-  data = data.replace(/\r(?!\n)/g, "\r\n");
+  data = data.replace(/\r\n?/g, "\n");
 
   let arr = data.split(
-    /(\d+)[^\S\r\n]*\r?\n(\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+) --> (\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+)/
+    /(\d+)[^\S\n]*\n(\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+) --> (\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+)[^\n]*\n/
   ).slice(1);
 
   const dialogues: Dialogue[] = [];
@@ -64,7 +63,7 @@ function fromSrt(data: string): Dialogue[] {
       startSeconds,
       endTime,
       endSeconds,
-      lines: text.split(/\r?\n/).filter(line => line),
+      lines: text.split("\n").filter(line => line.trim() || preserveEmptyLines),
     };
     dialogues.push(dialogue);
   }

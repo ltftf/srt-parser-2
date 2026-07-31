@@ -11,6 +11,9 @@ This is a fork of [`srt-parser-2`](https://github.com/1c7/srt-parser-2).
 - Removed the unnecessary class instantiation
 - Text is parsed as an array of strings (by line) instead of a single string with `\n` characters
 - Handles the obsolete `\r` line breaks
+- Any spaces following the dialogue counter are ignored
+- If there are coordinates (X1:… X2:… Y1:… Y2:…) or anything else following the timestamp, it is ignored
+- Empty line are ignored but can be preserved optionally
 
 ## Install
 
