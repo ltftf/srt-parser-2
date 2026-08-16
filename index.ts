@@ -48,7 +48,7 @@ function fromSrt(data: string, preserveEmptyLines?: boolean): Dialogue[] {
   data = data.replace(/\r\n?/g, "\n");
 
   let arr = data.split(
-    /(\d+)[^\S\n]*\n(\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+) --> (\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+)[^\n]*\n/
+    /(\d+)[^\S\n]*\n(\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+)[ \t]+-->[ \t]+(\d{1,2}:\d{1,2}:\d{1,2}[.,]\d+)[^\n]*\n/
   ).slice(1);
 
   const dialogues: Dialogue[] = [];
