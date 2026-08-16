@@ -1,7 +1,7 @@
 {
   "name": "@ltftf/srt-parser-2",
   "description": "Parse SRT into array",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "license": "MIT",
   "type": "module",
   "scripts": {
