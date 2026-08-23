@@ -5,6 +5,7 @@ interface Dialogue {
   endTime: string;
   endSeconds: number;
   lines: string[];
+  position: number | null;
 }
 
 function pad(digits: number, str: string, padEnd: boolean = true): string {
@@ -53,17 +54,40 @@ function fromSrt(data: string, preserveEmptyLines?: boolean): Dialogue[] {
 
   const dialogues: Dialogue[] = [];
   for (let i = 0; i < arr.length; i += 4) {
-    const text = arr[i + 3].trim();
+    let text = arr[i + 3];
     if (!text) continue;
     const [startTime, startSeconds] = getFixedTime(arr[i + 1]);
     const [endTime, endSeconds] = getFixedTime(arr[i + 2]);
+    let position = null;
+    const positionMatch = text.match(/{\\(an?)(\d{1,2})}/);
+    if (positionMatch) {
+      const [, type, pos] = positionMatch;
+      const posInt = parseInt(pos);
+      if (type === "an") {
+        if (posInt >= 1 && posInt <= 9) {
+          position = posInt;
+        }
+      } else {
+        if ([1, 2, 3].includes(posInt)) {
+          position = posInt;
+        } else if ([5, 6, 7].includes(posInt)) {
+          position = posInt + 2;
+        } else if ([9, 10, 11].includes(posInt)) {
+          position = posInt - 5;
+        }
+      }
+    }
+    text = text.replace(/{\\an?\d{1,2}}/g, "");
     const dialogue: Dialogue = {
       id: arr[i],
       startTime,
       startSeconds,
       endTime,
       endSeconds,
-      lines: text.split("\n").filter(line => line.trim() || preserveEmptyLines),
+      lines: text.split("\n")
+        .map(line => line.trim())
+        .filter(line => line || preserveEmptyLines),
+      position,
     };
     dialogues.push(dialogue);
   }
@@ -76,6 +100,9 @@ function toSrt(data: Dialogue[]) {
   for (const block of data) {
     res += block.id + EOL;
     res += block.startTime + " --> " + block.endTime + EOL;
+    if (block.position) {
+      res += `{\\an${block.position}}`;
+    }
     for (const line of block.lines) {
       res += line + EOL;
     }

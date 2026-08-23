@@ -13,7 +13,9 @@ This is a fork of [`srt-parser-2`](https://github.com/1c7/srt-parser-2).
 - Handles the obsolete `\r` line breaks
 - Any spaces following the dialogue counter are ignored
 - If there are coordinates (X1:… X2:… Y1:… Y2:…) or anything else following the timestamp, it is ignored
-- Empty line are ignored but can be preserved optionally
+- Extra spaces around `-->` are ignored
+- Position specified with a `{\an?}` or `{\a??}` tag is parsed
+- Empty lines are ignored but can be preserved optionally
 
 ## Install
 
@@ -49,14 +51,36 @@ it would become:
     startSeconds: 11.544,
     endTime: "00:00:12,682",
     endSeconds: 12.682,
-    text: [ "Hello", "World" ]
+    text: [ "Hello", "World" ],
+    position: null,
+}]
+```
+
+Positioned dialogue:
+
+```
+1
+00:00:11,544 --> 00:00:12,682
+{\an8}top text
+```
+
+becomes
+
+```
+[{
+    id: "1",
+    startTime: "00:00:11,544",
+    startSeconds: 11.544,
+    endTime: "00:00:12,682",
+    endSeconds: 12.682,
+    text: [ "top text" ],
+    position: 8,
 }]
 ```
 
 ### Environment support
 
-Since it only process text,  
-it should work in both `Browser` and `Node.js` environment
+Since it only processes text, it should work in both `Browser` and `Node.js` environment
 
 ## Usage
 
