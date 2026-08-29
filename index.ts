@@ -5,7 +5,7 @@ interface Dialogue {
   endTime: string;
   endSeconds: number;
   lines: string[];
-  position: number | null;
+  position?: number;
 }
 
 function pad(digits: number, str: string, padEnd: boolean = true): string {
@@ -58,7 +58,7 @@ function fromSrt(data: string, preserveEmptyLines?: boolean): Dialogue[] {
     if (!text) continue;
     const [startTime, startSeconds] = getFixedTime(arr[i + 1]);
     const [endTime, endSeconds] = getFixedTime(arr[i + 2]);
-    let position = null;
+    let position;
     const positionMatch = text.match(/{\\(an?)(\d{1,2})}/);
     if (positionMatch) {
       const [, type, pos] = positionMatch;
